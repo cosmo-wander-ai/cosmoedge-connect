@@ -3,8 +3,9 @@ PYTHON ?= python3
 BUILD_DIR ?= output/bin
 VERSION ?= development
 PACKAGE_DIR ?= ../cosmoedge-connect-$(VERSION)
+CHECK_BASE ?=
 
-.PHONY: build test test-python race vet docs-check check package-macos package-windows
+.PHONY: build test test-python race vet docs-check check check-all check-plan package-macos package-windows
 
 build:
 	$(PYTHON) -c "from pathlib import Path; Path('$(BUILD_DIR)').mkdir(parents=True, exist_ok=True)"
@@ -28,7 +29,14 @@ test-python:
 docs-check:
 	$(PYTHON) scripts/check-docs.py
 
-check: test test-python vet docs-check
+check:
+	$(PYTHON) scripts/check-changes.py $(if $(CHECK_BASE),--base "$(CHECK_BASE)") --run --go "$(GO)" --python "$(PYTHON)"
+
+check-all:
+	$(PYTHON) scripts/check-changes.py --all --run --go "$(GO)" --python "$(PYTHON)"
+
+check-plan:
+	$(PYTHON) scripts/check-changes.py $(if $(CHECK_BASE),--base "$(CHECK_BASE)") --json
 
 package-macos:
 	$(PYTHON) scripts/build-connect-macos.py --development-app --with-mcp --version $(VERSION) --output "$(PACKAGE_DIR)"

@@ -2,7 +2,7 @@ name: CosmoEdge Connect checks
 
 on:
   push:
-    branches: [main, dev, 'codex/**']
+    branches: [main, dev]
   pull_request:
   workflow_dispatch:
 
@@ -14,7 +14,90 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      scope: ${{ steps.classify.outputs.scope }}
+      docs: ${{ steps.classify.outputs.docs }}
+      full: ${{ steps.classify.outputs.full }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Classify the changed files
+        id: classify
+        shell: bash
+        run: |
+          python - <<'PYTHON'
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+          import sys
+
+          event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
+          event_name = os.environ["GITHUB_EVENT_NAME"]
+          comparison = None
+
+          def commit_exists(ref):
+              if not ref or set(ref) == {"0"}:
+                  return False
+              return subprocess.run(
+                  ["git", "cat-file", "-e", f"{ref}^{{commit}}"],
+                  stdout=subprocess.DEVNULL,
+                  stderr=subprocess.DEVNULL,
+              ).returncode == 0
+
+          if event_name == "pull_request":
+              base_ref = event["pull_request"]["base"]["sha"]
+              head_ref = event["pull_request"]["head"]["sha"]
+              if commit_exists(base_ref) and commit_exists(head_ref):
+                  merge_base = subprocess.run(
+                      ["git", "merge-base", base_ref, head_ref],
+                      capture_output=True,
+                      text=True,
+                  )
+                  if merge_base.returncode == 0 and merge_base.stdout.strip():
+                      comparison = (merge_base.stdout.strip(), head_ref)
+          elif event_name == "push":
+              base_ref = event.get("before", "")
+              head_ref = event.get("after", "")
+              if commit_exists(base_ref) and commit_exists(head_ref):
+                  comparison = (base_ref, head_ref)
+
+          command = [
+              sys.executable, "scripts/check-changes.py",
+              "--github-output", os.environ["GITHUB_OUTPUT"], "--json",
+          ]
+          if comparison is None:
+              # Manual runs, new branches and unavailable history get all checks.
+              print("Running all checks: manual request or no reliable comparison.", flush=True)
+              command.append("--all")
+          else:
+              command.extend(["--base", comparison[0], "--head", comparison[1]])
+          subprocess.run(command, check=True)
+          PYTHON
+
+  docs:
+    needs: changes
+    if: needs.changes.outputs.docs == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Documentation links
+        run: python scripts/check-docs.py
+
   checks:
+    needs: changes
+    if: needs.changes.outputs.full == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -52,8 +135,6 @@ jobs:
       - name: Package builder tests
         if: runner.os != 'Windows'
         run: python -m unittest discover -s scripts/tests -v
-      - name: Documentation links
-        run: python scripts/check-docs.py
       - name: Build public commands
         shell: bash
         run: |
@@ -70,6 +151,8 @@ jobs:
         run: go test -race -p 1 -count=1 ./internal/operations/... ./internal/operator/... ./internal/mcpbridge/... ./cmd/cosmoedge-connect ./cmd/cosmoedge-mcp
 
   windows-lifecycle:
+    needs: changes
+    if: needs.changes.outputs.full == 'true'
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
@@ -97,3 +180,46 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 7
+
+  ci-result:
+    needs: [changes, docs, checks, windows-lifecycle]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require all checks selected by the change scope
+        env:
+          NEEDS_JSON: ${{ toJSON(needs) }}
+        run: |
+          python - <<'PYTHON'
+          import json
+          import os
+          import sys
+
+          jobs = json.loads(os.environ["NEEDS_JSON"])
+          errors = []
+          if jobs["changes"]["result"] != "success":
+              errors.append("Change classification did not succeed.")
+          outputs = jobs["changes"].get("outputs", {})
+          expected_flags = {
+              "none": {"docs": "false", "full": "false"},
+              "docs": {"docs": "true", "full": "false"},
+              "full": {"docs": "true", "full": "true"},
+          }.get(outputs.get("scope"))
+          if expected_flags is None:
+              errors.append("Change classification did not publish a valid scope.")
+          elif any(outputs.get(flag) != value for flag, value in expected_flags.items()):
+              errors.append("Change classification outputs disagree with its scope.")
+
+          for name, flag in (("docs", "docs"), ("checks", "full"), ("windows-lifecycle", "full")):
+              result = jobs[name]["result"]
+              expected = "success" if outputs.get(flag) == "true" else "skipped"
+              if result != expected:
+                  errors.append(f"{name}: expected {expected}, got {result}.")
+
+          if errors:
+              for error in errors:
+                  print(f"::error::{error}")
+              sys.exit(1)
+          print(f"All required checks passed (scope: {outputs['scope']}).")
+          PYTHON

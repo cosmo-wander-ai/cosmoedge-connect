@@ -17,8 +17,8 @@ PowerShell; a skipped native test is not a pass.
 
 ```sh
 make build
+make check-plan
 make check
-make race
 ```
 
 Without Make, build the two public commands directly:
@@ -36,9 +36,29 @@ go run ./examples/mcp-client --server ./output/bin/cosmoedge-mcp --mock
 On Windows the server path is `./output/bin/cosmoedge-mcp.exe`. The example
 starts its own loopback fixture and exercises the actual stdio adapter.
 
-`make build` builds the CosmoEdge Connect service and local MCP adapter. `make check` runs
-Go tests with serialized package execution, Python client/installer tests, `go vet` and local documentation links.
-`make race` covers active service, operations, shared operator and MCP packages.
+`make build` builds the CosmoEdge Connect service and local MCP adapter.
+`make check-plan` shows which checks the current changes need; `make check` runs
+that selection. Project documentation and documentation images run only the
+local link check. Code, build/CI configuration, runtime Skills, integration
+files, schemas and unrecognized paths run the full local check set.
+
+The default comparison starts at the branch's common ancestor with `origin/main`,
+or `main` when no remote main is available, and includes staged, unstaged and
+untracked non-ignored files. Use `make check CHECK_BASE=origin/main` to compare
+against that exact baseline instead.
+When the comparison cannot be established, the selection falls back to full
+checks. To use the same selection without Make:
+
+```sh
+python3 scripts/check-changes.py --json
+python3 scripts/check-changes.py --run
+```
+
+`make check-all` explicitly runs Go tests with serialized package execution,
+Python client/installer tests, `go vet` and local documentation links, regardless
+of the diff. The direct equivalent is
+`python3 scripts/check-changes.py --all --run`.
+`make race` separately covers active service, operations, shared operator and MCP packages.
 See [testing](testing.md) for release validation beyond code checks. POSIX-only
 macOS installer/builder and report-hook modules skip on Windows; the Windows
 client, DACL and installer suites run natively there.
