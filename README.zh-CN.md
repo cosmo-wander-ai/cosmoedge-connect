@@ -60,8 +60,8 @@ MCP 是 AI 客户端调用工具的接口；你在对话中仍然用自然语言
 **已有 CosmoEdge 设备：** 准备一台能访问设备的电脑，以及设备上已有的机位与算法。
 
 1. 按[安装说明](docs/installation.zh-CN.md)构建并安装本地服务及配套客户端。
-2. 在 CosmoEdge Connect 本机页面填写设备信息并连接。
-3. 配置 [MCP 客户端](docs/mcp.zh-CN.md)，或导入配套的 WorkBuddy Skill。
+2. 配置 [MCP 客户端](docs/mcp.zh-CN.md)，或导入配套的 WorkBuddy Skill。
+3. 在对话中让助手“连接 CosmoEdge 设备”，在打开的本机页面填写设备信息并连接。
 4. 按[快速上手](docs/getting-started.zh-CN.md)完成首次查询、看图和操作。
 
 **先了解或评估：** 阅读[连续场景示例](docs/scenarios.zh-CN.md)，

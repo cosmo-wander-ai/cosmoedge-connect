@@ -73,8 +73,9 @@ and algorithms already installed on the device.
 
 1. Follow [installation](docs/installation.md) to build and install the local
    service and paired client.
-2. Enter the device details and connect through the CosmoEdge Connect local page.
-3. Configure an [MCP client](docs/mcp.md), or import the paired WorkBuddy Skill.
+2. Configure an [MCP client](docs/mcp.md), or import the paired WorkBuddy Skill.
+3. Ask the assistant to “Connect to a CosmoEdge device,” then enter the device
+   details on the local page it opens.
 4. Follow the [quickstart](docs/getting-started.md) for your first query, image
    request and operation.
 
