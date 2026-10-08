@@ -42,8 +42,16 @@ for source and development-package instructions.
   image for follow-ups; no continuous video reasoning claim.
 - Changes use existing sources and installed algorithms and require local
   business confirmation. Restoring configuration does not erase event history.
-- Remote/cloud MCP, multi-user hosting, multi-device routing, WeChat, scheduled
-  inspection, training and model conversion are outside this release.
+- Connect supplies tools and device access; the host plans tasks, applies the
+  user's task policy and provides any scheduling, notification or escalation.
+  There is no built-in scheduler or notification service. Host-scheduled checks
+  and preliminary review are integration patterns that need validation with the
+  chosen host; they are not shipped or certified end-to-end workflows.
+- Delegation does not replace local business confirmation. Each device pause or
+  resume still needs confirmation, including during a host-orchestrated task.
+- Remote/cloud MCP, multi-user hosting, multi-device routing, WeChat integration,
+  training and model conversion are outside this release. A brief's follow-up
+  list does not imply a built-in ticket, alarm-closure or business task-log module.
 
 Record future acceptance against a specific release and manifest, separating
 source checks, installation, actual client delivery and device behavior. Preserve

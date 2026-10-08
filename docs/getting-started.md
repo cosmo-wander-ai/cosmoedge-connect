@@ -26,6 +26,18 @@ First confirm that the returned names and states belong to the intended device.
 If a name is ambiguous, select a specific item from the catalog. A successful
 installation or running process does not mean the device is connected.
 
+## Delegate a complete task
+
+Once connected, describe the job, its scope and what you want back:
+
+> Prepare a shift handover brief: summarize yesterday's alarms for the East Gate and West Gate, get one image from each, list anything that needs an on-site check, and include the original report and images.
+
+The assistant can organize the queries and image requests, then return a brief
+with originals and items for people to check. You do not need to name each tool
+call; device changes still need confirmation on the local page. See the
+[task examples](scenarios.md) for more ways to delegate work. You can also make
+the individual requests below.
+
 ## Query alarms
 
 > Summarize yesterday's alarms for the East Gate and West Gate, list each source separately, and give me the original report.

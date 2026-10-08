@@ -20,12 +20,32 @@ WorkBuddy Skill -> paired Python client -> same operations API
 
 | Layer | Owns |
 | --- | --- |
+| AI host and its configured integration | Task planning, model-based preliminary review, task policy and any scheduling, notifications or escalation |
 | Skill | Interpreting dates and names, asking useful clarification, same-image follow-ups, explaining evidence |
-| MCP / host client | Tool arguments, explicit business contexts, persisted request identity, bounded continuation, native content delivery |
+| MCP adapter / host tool client | Tool arguments, explicit business contexts, persisted request identity, bounded continuation, native content delivery |
 | Operations service | Business calculations, frozen target selection, durable operation state, artifact integrity, execution and readback |
 | Connection owner | One selected device, protected connection persistence, startup restoration and exclusive state-root ownership |
 | Action Kernel | Accepted dispatch, immutable proposed target, exact confirmation and verification of device writes |
 | Platform installer | Paired package identity, current-user installation, managed process lifecycle and file recovery |
+
+A user can delegate a whole handover task: the host coordinates alarm queries,
+requested source images and a brief with follow-up items and originals. Connect
+supplies the tool operations, device access and recoverable evidence. Its durable
+operation records are not a business task log, ticketing system or alarm-closure
+workflow. The host retains responsibility for the task and its delivery.
+
+Scheduled checks and authorized preliminary review can be built by a capable
+host using these tools. Connect has no built-in scheduler or notification service;
+those host integrations need separate validation. Integration includes keeping
+the local service available, launching the local stdio adapter, maintaining valid
+service-session authorization, and defining each run's task scope and state.
+The host must handle missed runs, unavailable devices, expired sessions and
+failed delivery. After an uncertain submission it must recover the original
+operation using its saved context and request identity, rather than start a
+duplicate run. See [MCP recovery](mcp.md#request-recovery) for session and journal
+lifetimes. Host policy cannot authorize a device write in place of local
+confirmation: each pause or resume still uses its own proposal, confirmation
+and result verification.
 
 The public integration contract is [MCP](mcp.md). Internal HTTP routes and Go
 packages may change with their paired adapter. The Go module is
@@ -79,6 +99,8 @@ identities. Third-party MCP clients implement the protocol without matching the
 repository revision. Installation integrity, runtime behavior, image delivery
 and device acceptance are separate checks; see [testing](testing.md).
 
-Remote HTTP MCP, multi-user authentication, multi-device routing, scheduled
-inspection and phone confirmation are outside this local release. Extending
-those requires explicit identity, artifact-access and confirmation designs.
+Remote HTTP MCP, multi-user authentication, multi-device routing and phone
+confirmation are outside this local release. Extending those requires explicit
+identity, artifact-access and confirmation designs. A host that schedules local
+stdio calls must preserve the same context, request-recovery and confirmation
+contracts; scheduled execution is not an additional Connect service.

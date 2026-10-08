@@ -2,69 +2,82 @@
 
 **English** | [简体中文](README.zh-CN.md) · **Alpha · Source preview**
 
-**Give your AI assistant a view of your site, access to its records, and a way to help operate it.**
+**Delegate routine site operations to your AI assistant.**
 
-Connect CosmoEdge alarms, camera images and device operations to the AI assistant
-you use. Ask a question, get source evidence, follow up, and confirm a specific
-action when needed. Built for teams with an existing CosmoEdge device and for
-developers building workflows for them.
+Hand over a task, receive a useful result with its source evidence, and handle
+the exceptions that need your judgment. CosmoEdge Connect gives your assistant
+access to an existing device's alarms, source images and confirmed operations.
+Built for site teams and the partners who turn their working practices into
+repeatable assistant workflows.
+
+> Prepare my shift handover: review yesterday's retained alarms at the back door
+> and receiving area, get one image from each of those sources, and use our aisle
+> check rules to draft a brief. List anything that needs someone to follow up,
+> distinguish uncertain observations, and include the original report and images.
 
 [Explore a workflow](docs/scenarios.md) · [Connect your device](docs/getting-started.md) · [Try without a device](#try-without-a-device)
 
-![Illustrative workflow: query alarms for statistics and the original report, request a source image and ask follow-up questions, then prepare a device change for local confirmation and state verification. Not a client screenshot.](docs/assets/connect-workflow.svg)
+## Hand over a task and receive a useful result
 
-## Connect your AI assistant to your site
+The assistant can organize the queries and image requests within that task,
+then return the brief, supporting originals and follow-up list. You review the
+result and deal with missing evidence, unclear observations or a proposed device
+change. Source names and rules come from your site. The host assistant assembles
+the brief and preliminary review; Connect supplies tool results and originals.
 
-CosmoEdge manages site cameras and deployed detection algorithms. Connect runs
-on your computer to reach the device, retrieve original material and carry out
-operations. Your AI assistant handles the conversation and uses its host model
-to interpret the images it receives.
+![Illustrative delegation: hand over a complete task, let the assistant gather records and images, and receive a brief, originals and items for review. Not a client screenshot.](docs/assets/connect-workflow.svg)
+
+## Three ways to delegate
+
+| Mode | What you delegate | How it fits this release |
+| --- | --- | --- |
+| **User-triggered delegation** | “Prepare the handover brief for these sources.” | You start the task; the host organizes the queries and image requests and assembles the result. |
+| **Host-scheduled checks** | “At the agreed handover time, run this check and send me the brief.” | A capable host starts the task on schedule, coordinates calls and delivers the result. |
+| **Preliminary review under agreed rules** | “Review these records and images using our rules, and bring unclear or exceptional cases to me.” | The partner gives the host the review rules and authorized scope; the assistant returns items for a person to handle. |
+
+Configure scheduling, notifications and review rules in the chosen host, then
+validate the workflow for your site. This release provides the device tools;
+device changes retain local confirmation.
+
+[Follow a complete delegation, from handover brief to exceptions →](docs/scenarios.md)
+
+## How Connect and the assistant share the work
+
+Connect runs on your computer and reaches one selected CosmoEdge device. Use an
+AI client that supports local MCP, or the paired WorkBuddy integration. MCP is
+the interface a host uses to call tools; you describe the task in ordinary language.
+
+| Responsibility | Who provides it |
+| --- | --- |
+| Task scope, review rules and decisions on exceptions | Site staff and their integration partner |
+| Planning, model-based review, scheduling, notifications and task policy | The chosen AI host and its configured integration |
+| Device access, alarm queries, source images, original retrieval and confirmed operations | CosmoEdge Connect |
+| Continuous detection under the device's existing configuration | Deployed CosmoEdge edge algorithms |
 
 ```mermaid
 flowchart LR
-    User[Your request] --> Assistant[AI assistant]
-    Assistant <--> Connect[CosmoEdge Connect]
+    User[Delegate a task and agree its rules] --> Assistant[AI assistant organizes the work]
+    Assistant <--> Connect[CosmoEdge Connect tools and originals]
     Connect <--> Device[One CosmoEdge device and its sources]
-    Assistant --> Results[Statistics and reports · Images · Operation results]
-    Results --> User
+    Assistant --> Results[Brief · Items for review · Originals]
+    Results --> Review[Receive the result and handle exceptions]
+    Host[Host scheduling and notifications] -. Integration pattern .-> Assistant
 ```
 
-Use an AI client that supports local MCP, or the paired WorkBuddy integration.
-MCP is the interface an AI client uses to call tools; you still describe your task
-in ordinary language.
+Existing edge detection and on-demand image review can work together: one runs
+the configured detection, while the other helps examine questions as they arise.
+Partners can first test whether a role's question is answered usefully, then
+decide whether to develop a dedicated detector or a broader workflow.
 
-## Start with a question from your workday
+## Turn site knowledge into an ongoing service
 
-Site handovers, store checks and factory maintenance all involve finding records,
-looking at a scene or adjusting a detection task. Source names below are examples;
-use the sources and algorithms already installed on your device.
+Partners can agree the handover format with each role, map everyday source names
+to the device catalog, define image-review rules and escalation conditions, and
+test whether the resulting brief helps the next shift. Keep those rules and
+training examples up to date as people, cameras and working practices change.
 
-| When to use it | What to ask | What you get |
-| --- | --- | --- |
-| **Handovers and operational reviews** | “What alarms were recorded at the east and west gates yesterday? Group them by category and give me the original report.” | Statistics and a report queried by time window, source and algorithm, reducing manual filtering and compilation |
-| **An on-demand look at your site** | “Get an image of the loading area. What is stored near the aisle? Give me the original image.” | A source image and the host model's interpretation; “What is on the right in that image?” reuses the same original |
-| **Maintenance and device operations** | “Prepare to pause this detection task in the loading area, keeping its settings.” | A specific proposal, local confirmation and a check of device state after execution; resuming requires another request and confirmation |
-
-Combine these steps in one working conversation: review the alarm distribution,
-request an image from a selected source, then prepare to pause or resume a task
-if the site team has decided to carry out maintenance. Reports and images remain
-available for follow-up questions, and changes have an explicit confirmation and
-verification step.
-
-[Walk through a complete example: from handover to maintenance →](docs/scenarios.md)
-
-## Combine established detection with questions as they arise
-
-Deployed edge algorithms keep running their configured detection tasks. When
-someone has a new question about people, objects or the use of a space, they can
-request a still image and discuss it with the host model while keeping the original
-in view. This provides a person-initiated way to look into questions that do not
-yet have a dedicated detector.
-
-Developers can combine queries, image requests and confirmed operations into their
-own handover, review or maintenance workflows. See [MCP integration](docs/mcp.md)
-for the public tools and [operations](docs/operations.md) for interpreting results
-and handling changes.
+See [MCP integration](docs/mcp.md) for the public tools and
+[operations](docs/operations.md) for evidence and device-change rules.
 
 ## Getting started
 
@@ -124,9 +137,10 @@ tooling. See [compatibility](docs/compatibility.md) for platform checks and pack
 and client acceptance status.
 
 - **Connection:** one local user, one selected CosmoEdge device and its existing sources.
-- **Records and images:** summaries state the retained-record scope actually read. Image questions use one captured image and the host model; check interpretations against the site. A new image cannot establish the cause of a past alarm.
+- **Records and images:** summaries state the retained-record scope actually read. Image questions use a captured still image and the host model, not continuous video reasoning; check interpretations against the site. A new image cannot establish the cause of a past alarm. The host's deployment determines where its model processes images.
 - **Device operations:** enable or disable installed algorithms while preserving parameters, regions and schedules. Pausing and resuming each require local confirmation.
-- **Not yet supported:** multiple devices, remote/cloud MCP, WeChat, scheduled inspections or autonomous action without user confirmation.
+- **Host orchestration:** no built-in scheduler or notification service. A capable host can orchestrate scheduled checks and preliminary review, subject to integration validation and the same device-confirmation rules.
+- **Outside this release:** multiple devices, remote/cloud MCP, WeChat integration and device changes without local user confirmation.
 
 ## Development and integration
 
@@ -143,7 +157,7 @@ commitment. The WorkBuddy package also requires Python 3.9+; see
 
 | Documentation | Contents |
 | --- | --- |
-| [Workflow examples](docs/scenarios.md) | A sequence of handover, image review and maintenance tasks |
+| [Workflow examples](docs/scenarios.md) | Delegated handover briefs, host orchestration and handling exceptions |
 | [Architecture](docs/architecture.md) | Responsibilities of the service, adapter, Skill and runtime state |
 | [Operations](docs/operations.md) | Counting rules, image sources, request recovery and change outcomes |
 | [Testing](docs/testing.md) | Automated checks, real-client validation and device acceptance |
