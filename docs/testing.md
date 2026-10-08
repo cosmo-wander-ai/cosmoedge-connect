@@ -7,9 +7,31 @@ be listed as accepted.
 ## Automated checks
 
 ```sh
+make check-plan
 make check
-make race
 ```
+
+Local checks and GitHub Actions use the same change classifier. Ordinary
+project Markdown and images under `docs/assets/` need only documentation link
+checks. Runtime Skills and integration instructions, schemas, code, build/CI
+configuration and unknown paths select the full checks. Deleted files and both
+sides of a rename count when choosing the scope.
+
+For an explicit full local run, use `make check-all`; add `make race` on a
+supported native platform when needed. Without Make, use
+`python3 scripts/check-changes.py --run`, or add `--all` for a full run.
+An unavailable comparison baseline also selects full checks.
+
+GitHub runs a lightweight change-selection job and checks documentation once
+on Ubuntu. Pure documentation changes skip the three-platform test/build matrix
+and native Windows lifecycle job. Other changes keep those checks, including
+Linux race tests and the synthetic MCP workflow. Manual `workflow_dispatch`
+runs always select the full suite. The stable `ci-result` job reports the
+combined outcome, including failed or cancelled selection/check jobs.
+
+Development branches are checked through pull requests, avoiding duplicate
+push and PR runs for the same branch commit. Pushes to `main` and `dev` retain
+mainline checks, with the same path selection.
 
 For focused diagnostics:
 
@@ -23,8 +45,8 @@ python3 -m unittest discover -s scripts/tests -v
 python3 scripts/check-docs.py
 ```
 
-Run race checks on a supported native platform. CI runs Go/client checks on
-Linux, macOS and Windows, with Linux race checks. POSIX-only macOS installer,
+For full runs, CI runs Go/client checks on Linux, macOS and Windows, with Linux
+race checks. POSIX-only macOS installer,
 macOS builder and report-hook tests skip on Windows; Windows DACL and native
 PowerShell tests skip on non-Windows hosts. Record those outcomes as skips. Installer unit tests that replace OS boundaries do not prove real
 launchd/PowerShell behavior. Cross-compilation is build evidence only.

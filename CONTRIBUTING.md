@@ -9,6 +9,12 @@ Include the problem, resulting behavior and relevant validation in the pull
 request. Describe what was tested locally, in a package, in a real AI client and
 on a device separately. A cross-compiled binary is not native runtime evidence.
 
+Run `make check-plan` to see the selected checks and `make check` to run them.
+Ordinary documentation changes need only the documentation check; code,
+configuration and runtime integration changes select full checks. Use
+`make check-all` when you want an explicit full run. The same scope selection
+is used in GitHub Actions.
+
 Follow [testing](docs/testing.md). Preserve existing failed-case regressions and
 update contracts with behavior changes. Tests should exercise externally useful
 behavior, request recovery and failure handling rather than copy implementation
