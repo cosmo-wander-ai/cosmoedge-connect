@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="440" viewBox="0 0 960 440" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="700" viewBox="0 0 960 700" role="img" aria-labelledby="title description">
   <title id="title">CosmoEdge Connect: give your AI assistant a complete site task</title>
-  <desc id="description">Illustrative workflow, not a client screenshot. Describe a complete task, its scope and expected deliverables. The assistant organizes queries, image requests and a brief, returning original files, follow-up items and questions for people to resolve. Device changes still require local user confirmation.</desc>
-  <rect x="1" y="1" width="958" height="438" rx="20" fill="#f6f8fc" stroke="#d9e1ec" stroke-width="2"/>
+  <desc id="description">Illustrative workflow, not a client screenshot. A person delegates a complete task; the assistant organizes queries, images and a brief, returning originals and follow-up items. Camera video enters the deployed CosmoEdge system for video ingestion, continuous detection, and task, alarm and event management. CosmoEdge Connect runs on a local computer, connects to one deployed CosmoEdge device, and provides tools to the AI assistant through MCP. Device changes still require local user confirmation.</desc>
+  <rect x="1" y="1" width="958" height="698" rx="20" fill="#f6f8fc" stroke="#d9e1ec" stroke-width="2"/>
   <g font-family="system-ui, sans-serif" fill="#17263e">
     <path d="M34 29h13v13H34zM51 29h13v13H51zM34 46h13v13H34z" fill="#2563eb"/>
     <path d="M51 46h13v13H51z" fill="#8cb3fb"/>
@@ -32,7 +32,7 @@
       <text x="902" y="164">03</text>
     </g>
     <g font-size="21" font-weight="650" letter-spacing="-.4">
-      <text x="56" y="212">Delegate a task</text>
+      <text x="56" y="212">You delegate a task</text>
       <text x="360" y="212">Assistant organizes</text>
       <text x="664" y="212">Get the work back</text>
     </g>
@@ -49,6 +49,50 @@
       <text x="360" y="360">Less searching and copying</text>
       <text x="664" y="360">Review and handle exceptions</text>
     </g>
-    <text x="480" y="416" text-anchor="middle" font-size="14" fill="#63738b">Illustrative workflow, not a screenshot · Device changes need local confirmation</text>
+    <path d="M32 408h896" stroke="#d9e1ec" stroke-width="1.5"/>
+    <text x="32" y="440" font-size="19" font-weight="600" fill="#394d68">Your existing CosmoEdge system supplies the records and images</text>
+
+    <g stroke="#d9e1ec" stroke-width="1.5">
+      <rect x="32" y="462" width="132" height="178" rx="12" fill="#ffffff"/>
+      <rect x="196" y="462" width="264" height="178" rx="12" fill="#eaf2ff" stroke="#bfd0ec"/>
+      <rect x="492" y="462" width="244" height="178" rx="12" fill="#ffffff"/>
+      <rect x="780" y="462" width="148" height="178" rx="12" fill="#ffffff"/>
+    </g>
+    <g fill="none" stroke="#8fa6c4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M166 554h28m-5-5 5 5-5 5"/>
+      <path d="M462 554h28m-5-5 5 5-5 5m-18-10-5 5 5 5"/>
+      <path d="M738 554h40m-5-5 5 5-5 5m-30-10-5 5 5 5"/>
+    </g>
+    <text x="758" y="540" text-anchor="middle" font-size="15" font-weight="600" fill="#24549e">MCP</text>
+
+    <g fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="78" y="488" width="29" height="21" rx="4"/>
+      <path d="m107 494 10-5v19l-10-5M90 510v8m-7 0h14"/>
+    </g>
+    <text x="98" y="553" text-anchor="middle" font-size="20" font-weight="650">Cameras</text>
+    <text x="98" y="582" text-anchor="middle" font-size="15" fill="#536279">Video streams</text>
+
+    <text x="214" y="495" font-size="22" font-weight="650" fill="#194884">CosmoEdge system</text>
+    <text x="214" y="522" font-size="16" fill="#536279">One deployed device</text>
+    <g font-size="16" fill="#394d68">
+      <text x="214" y="554">Video ingestion</text>
+      <text x="214" y="582">Continuous detection</text>
+      <text x="214" y="610">Task, alarm, event management</text>
+    </g>
+
+    <text x="510" y="495" font-size="21" font-weight="650">CosmoEdge Connect</text>
+    <g font-size="16" fill="#394d68">
+      <text x="510" y="533">On your local computer</text>
+      <text x="510" y="569">Connects to one device</text>
+      <text x="510" y="605">Tools for the assistant</text>
+    </g>
+
+    <text x="854" y="495" text-anchor="middle" font-size="19" font-weight="650">AI assistant</text>
+    <g font-size="16" fill="#394d68" text-anchor="middle">
+      <text x="854" y="540">Uses tools</text>
+      <text x="854" y="575">Reviews images</text>
+      <text x="854" y="610">Writes a brief</text>
+    </g>
+    <text x="480" y="676" text-anchor="middle" font-size="14" fill="#63738b">Illustrative workflow, not a screenshot · Device changes need local confirmation</text>
   </g>
 </svg>

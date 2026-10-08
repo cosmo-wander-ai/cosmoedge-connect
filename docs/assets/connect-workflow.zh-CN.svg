@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="440" viewBox="0 0 960 440" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="700" viewBox="0 0 960 700" role="img" aria-labelledby="title description">
   <title id="title">CosmoEdge Connect：把一段现场工作交给 AI 助手</title>
-  <desc id="description">场景示意，非客户端运行截图。交代一项完整工作，说明范围和希望收到的结果。助手组织查询、取图和整理，交回简报、原件、待办与需人核查的情况，减少翻后台和手工汇总。设备变更仍需用户在本机确认。</desc>
-  <rect x="1" y="1" width="958" height="438" rx="20" fill="#f6f8fc" stroke="#d9e1ec" stroke-width="2"/>
+  <desc id="description">场景示意，非客户端运行截图。人交代完整工作，助手组织查询、取图和整理，交回简报、原件、待办与需人核查的情况。摄像头视频进入已部署的 CosmoEdge 系统，由系统完成视频接入、持续检测以及任务、告警和事件管理。CosmoEdge Connect 运行在本地电脑，连接单台已部署的 CosmoEdge 设备，通过 MCP 为 AI 助手提供工具。设备变更仍需用户在本机确认。</desc>
+  <rect x="1" y="1" width="958" height="698" rx="20" fill="#f6f8fc" stroke="#d9e1ec" stroke-width="2"/>
   <g font-family="system-ui, sans-serif" fill="#17263e">
     <path d="M34 29h13v13H34zM51 29h13v13H51zM34 46h13v13H34z" fill="#2563eb"/>
     <path d="M51 46h13v13H51z" fill="#8cb3fb"/>
@@ -32,7 +32,7 @@
       <text x="902" y="164">03</text>
     </g>
     <g font-size="26" font-weight="650">
-      <text x="56" y="212">交代一项工作</text>
+      <text x="56" y="212">人交代一项工作</text>
       <text x="360" y="212">助手组织工作</text>
       <text x="664" y="212">交回可用材料</text>
     </g>
@@ -47,6 +47,50 @@
       <text x="360" y="360">少翻后台 + 少手工汇总</text>
       <text x="664" y="360">看重点 + 跟进待办</text>
     </g>
-    <text x="480" y="416" text-anchor="middle" font-size="14" fill="#63738b">场景示意，非运行截图 · 设备变更需本机确认</text>
+    <path d="M32 408h896" stroke="#d9e1ec" stroke-width="1.5"/>
+    <text x="32" y="440" font-size="21" font-weight="600" fill="#394d68">已有的 CosmoEdge 系统，提供记录与图像</text>
+
+    <g stroke="#d9e1ec" stroke-width="1.5">
+      <rect x="32" y="462" width="132" height="178" rx="12" fill="#ffffff"/>
+      <rect x="196" y="462" width="264" height="178" rx="12" fill="#eaf2ff" stroke="#bfd0ec"/>
+      <rect x="492" y="462" width="244" height="178" rx="12" fill="#ffffff"/>
+      <rect x="780" y="462" width="148" height="178" rx="12" fill="#ffffff"/>
+    </g>
+    <g fill="none" stroke="#8fa6c4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M166 554h28m-5-5 5 5-5 5"/>
+      <path d="M462 554h28m-5-5 5 5-5 5m-18-10-5 5 5 5"/>
+      <path d="M738 554h40m-5-5 5 5-5 5m-30-10-5 5 5 5"/>
+    </g>
+    <text x="758" y="540" text-anchor="middle" font-size="15" font-weight="600" fill="#24549e">MCP</text>
+
+    <g fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="78" y="488" width="29" height="21" rx="4"/>
+      <path d="m107 494 10-5v19l-10-5M90 510v8m-7 0h14"/>
+    </g>
+    <text x="98" y="553" text-anchor="middle" font-size="20" font-weight="650">摄像头</text>
+    <text x="98" y="582" text-anchor="middle" font-size="15" fill="#536279">视频流</text>
+
+    <text x="214" y="495" font-size="24" font-weight="650" fill="#194884">CosmoEdge 系统</text>
+    <text x="214" y="522" font-size="16" fill="#536279">已部署的一台设备</text>
+    <g font-size="17" fill="#394d68">
+      <text x="214" y="554">视频接入</text>
+      <text x="214" y="582">持续检测</text>
+      <text x="214" y="610">任务 · 告警 · 事件管理</text>
+    </g>
+
+    <text x="510" y="495" font-size="21" font-weight="650">CosmoEdge Connect</text>
+    <g font-size="17" fill="#394d68">
+      <text x="510" y="533">在本地电脑运行</text>
+      <text x="510" y="569">连接单台已部署设备</text>
+      <text x="510" y="605">向助手提供设备工具</text>
+    </g>
+
+    <text x="854" y="495" text-anchor="middle" font-size="21" font-weight="650">AI 助手</text>
+    <g font-size="16" fill="#394d68" text-anchor="middle">
+      <text x="854" y="540">调用工具</text>
+      <text x="854" y="575">看图与整理</text>
+      <text x="854" y="610">形成简报</text>
+    </g>
+    <text x="480" y="676" text-anchor="middle" font-size="14" fill="#63738b">场景示意，非运行截图 · 设备变更需本机确认</text>
   </g>
 </svg>
