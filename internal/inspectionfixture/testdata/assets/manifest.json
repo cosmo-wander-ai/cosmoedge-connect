@@ -1,0 +1,33 @@
+{
+  "schema": "cosmoedge.inspection.fixture.assets.v1",
+  "snapshot": {
+    "file": "scene.jpg",
+    "sha256": "ddfad535736ee271dd0c03a1b7d9298ad38a626c6d02c841064945bce708c5c5",
+    "width": 1280,
+    "height": 720,
+    "mimeType": "image/jpeg"
+  },
+  "clip": {
+    "file": "scene.mp4",
+    "sha256": "641e517ea1c255dc6500330cdb366211acab79e2eacacffbcdb3f83816782f50",
+    "width": 1280,
+    "height": 720,
+    "mimeType": "video/mp4",
+    "codec": "h264",
+    "frameRate": 15,
+    "durationMillis": 5000
+  },
+  "clipFrame": {
+    "file": "scene-frame.jpg",
+    "sha256": "f06cdd0ab4c13eefb32c13757694087fe4202747d097394d6ce14ade25b2837f",
+    "width": 1280,
+    "height": 720,
+    "mimeType": "image/jpeg",
+    "offsetMillis": 1000
+  },
+  "event": {
+    "file": "event.json",
+    "sha256": "141f35c8f6e0931c22f0bd091dd1f356d6fdddfebefd24dc349fe7757c7b01f0",
+    "mimeType": "application/json"
+  }
+}

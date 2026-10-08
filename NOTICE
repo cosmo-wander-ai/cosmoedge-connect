@@ -1,0 +1,17 @@
+CosmoEdge Connect
+https://github.com/cosmo-wander-ai/cosmoedge-connect
+
+CosmoEdge Connect is licensed under the Apache License, Version 2.0.
+See LICENSE for the complete terms.
+
+Third-party software
+--------------------
+
+Third-party dependencies remain subject to their own licenses and copyright
+notices. The Go dependency versions are recorded in go.mod and go.sum.
+The preserved originals and exact module/version/source/hash index are under
+third_party/licenses/. Distribution packages include this directory together
+with LICENSE and NOTICE. This repository license does not replace those terms.
+
+Device software, model packages, captured images and other external materials
+are not licensed by this notice merely because CosmoEdge Connect can access them.

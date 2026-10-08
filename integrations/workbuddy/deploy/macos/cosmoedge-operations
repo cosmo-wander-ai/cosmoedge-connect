@@ -1,0 +1,19 @@
+#!/bin/sh
+# This launcher is part of the paired Skill; Python discovery belongs to installation.
+set -eu
+runtime_file="$HOME/Library/Application Support/CosmoEdgeConnect/python.path"
+if [ ! -f "$runtime_file" ] || [ -L "$runtime_file" ]; then
+    printf '%s\n' '{"ok":false,"userMessage":"本机配套服务尚未完成安装，请先打开 CosmoEdge Connect 安装包完成安装。"}'
+    exit 1
+fi
+IFS= read -r python_command < "$runtime_file" || true
+case "$python_command" in
+    /*) ;;
+    *) printf '%s\n' '{"ok":false,"userMessage":"本机客户端运行环境不可用，请重新运行 CosmoEdge Connect 安装包。"}'; exit 1;;
+esac
+if [ ! -x "$python_command" ]; then
+    printf '%s\n' '{"ok":false,"userMessage":"本机客户端运行环境不可用，请重新运行 CosmoEdge Connect 安装包。"}'
+    exit 1
+fi
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+exec "$python_command" "$script_dir/cosmoedge_operations.py" "$@"

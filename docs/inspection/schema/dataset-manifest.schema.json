@@ -1,0 +1,432 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cosmoedge-connect.local/schemas/inspection/dataset-intake.v2.json",
+  "title": "CosmoEdge inspection dataset intake v2",
+  "description": "Structural companion to internal/inspection/dataset.IntakeRequest. Runtime authorization, catalog, probe, digest, retention, review, ordering, and leakage checks remain authoritative.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "tenantId",
+    "siteId",
+    "datasetId",
+    "revision",
+    "purposeRef",
+    "authorityRef",
+    "principalSha256",
+    "policy",
+    "items"
+  ],
+  "properties": {
+    "schema": { "const": "cosmoedge.inspection.dataset.v2" },
+    "tenantId": { "$ref": "#/$defs/opaqueRef" },
+    "siteId": { "$ref": "#/$defs/opaqueRef" },
+    "datasetId": { "$ref": "#/$defs/opaqueRef" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "purposeRef": { "$ref": "#/$defs/opaqueRef" },
+    "authorityRef": { "$ref": "#/$defs/opaqueRef" },
+    "principalSha256": { "$ref": "#/$defs/sha256" },
+    "policy": { "$ref": "#/$defs/policy" },
+    "items": {
+      "type": "array",
+      "description": "Items must be strictly ascending by itemId and must cover every v2 split.",
+      "minItems": 3,
+      "maxItems": 10000,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/item" },
+      "allOf": [
+        {
+          "contains": {
+            "properties": { "split": { "const": "train" } },
+            "required": ["split"]
+          },
+          "minContains": 1
+        },
+        {
+          "contains": {
+            "properties": { "split": { "const": "validation" } },
+            "required": ["split"]
+          },
+          "minContains": 1
+        },
+        {
+          "contains": {
+            "properties": { "split": { "const": "test" } },
+            "required": ["split"]
+          },
+          "minContains": 1
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "opaqueRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "allOf": [
+        { "not": { "pattern": "^[Hh][Tt][Tt][Pp][Ss]?:" } },
+        { "not": { "pattern": "^[Rr][Tt][Ss][Pp][Ss]?:" } },
+        { "not": { "pattern": "^[Ff][Ii][Ll][Ee]:" } },
+        { "not": { "pattern": "^[Dd][Aa][Tt][Aa]:" } }
+      ]
+    },
+    "mediaRef": {
+      "type": "string",
+      "pattern": "^media_[a-f0-9]{32}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mediaKind": {
+      "enum": ["image", "frame_set", "video_clip", "metric", "detection", "event"]
+    },
+    "privacyClass": {
+      "enum": ["public", "internal", "sensitive", "restricted"]
+    },
+    "split": {
+      "enum": ["train", "validation", "test"]
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "allowedKinds",
+        "allowedPrivacyClasses",
+        "requiredRetentionPolicyRefs",
+        "retainUntil",
+        "minimumRemainingRetentionSeconds",
+        "reviewPolicyRef",
+        "minimumApprovals",
+        "adjacentSourceWindowSeconds"
+      ],
+      "properties": {
+        "schema": { "const": "cosmoedge.inspection.dataset.policy.v2" },
+        "allowedKinds": {
+          "type": "array",
+          "description": "Strictly ascending by media-kind value.",
+          "minItems": 1,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/mediaKind" }
+        },
+        "allowedPrivacyClasses": {
+          "type": "array",
+          "description": "Strictly ascending by privacy-class value.",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/privacyClass" }
+        },
+        "requiredRetentionPolicyRefs": {
+          "type": "array",
+          "description": "Strictly ascending opaque retention-policy references.",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/opaqueRef" }
+        },
+        "retainUntil": { "$ref": "#/$defs/timestamp" },
+        "minimumRemainingRetentionSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 31536000
+        },
+        "reviewPolicyRef": { "$ref": "#/$defs/opaqueRef" },
+        "minimumApprovals": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        },
+        "adjacentSourceWindowSeconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 604800
+        }
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "itemId",
+        "mediaRef",
+        "expectedKind",
+        "expectedMime",
+        "expectedSha256",
+        "groupRef",
+        "split",
+        "label",
+        "reviews"
+      ],
+      "properties": {
+        "schema": { "const": "cosmoedge.inspection.dataset.item.v2" },
+        "itemId": { "$ref": "#/$defs/opaqueRef" },
+        "mediaRef": { "$ref": "#/$defs/mediaRef" },
+        "expectedKind": { "$ref": "#/$defs/mediaKind" },
+        "expectedMime": {
+          "type": "string",
+          "pattern": "^[a-z0-9!#$&^_.+/-]*$"
+        },
+        "expectedSha256": { "$ref": "#/$defs/sha256" },
+        "groupRef": { "$ref": "#/$defs/opaqueRef" },
+        "split": { "$ref": "#/$defs/split" },
+        "label": { "$ref": "#/$defs/label" },
+        "reviews": {
+          "type": "array",
+          "description": "Approved reviews must be strictly ascending by reviewId.",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/review" }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "expectedKind": { "const": "frame_set" } },
+            "required": ["expectedKind"]
+          },
+          "then": {
+            "properties": { "expectedMime": { "const": "" } }
+          },
+          "else": {
+            "properties": { "expectedMime": { "minLength": 1 } }
+          }
+        }
+      ]
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "reviewId",
+        "state",
+        "reviewerSha256",
+        "descriptorSha256",
+        "labelSha256",
+        "policyRef",
+        "reviewedAt"
+      ],
+      "properties": {
+        "schema": { "const": "cosmoedge.inspection.dataset.review.v2" },
+        "reviewId": { "$ref": "#/$defs/opaqueRef" },
+        "state": { "const": "approved" },
+        "reviewerSha256": { "$ref": "#/$defs/sha256" },
+        "descriptorSha256": { "$ref": "#/$defs/sha256" },
+        "labelSha256": { "$ref": "#/$defs/sha256" },
+        "policyRef": { "$ref": "#/$defs/opaqueRef" },
+        "reviewedAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "label": {
+      "oneOf": [
+        { "$ref": "#/$defs/classificationLabel" },
+        { "$ref": "#/$defs/enumLabel" },
+        { "$ref": "#/$defs/structuredLabel" },
+        { "$ref": "#/$defs/countLabel" },
+        { "$ref": "#/$defs/metricLabel" },
+        { "$ref": "#/$defs/detectionLabel" },
+        { "$ref": "#/$defs/eventLabel" }
+      ]
+    },
+    "classificationLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "classification"],
+      "properties": {
+        "kind": { "const": "classification" },
+        "classification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value"],
+          "properties": {
+            "value": {
+              "enum": ["meets_rule", "needs_attention", "uncertain", "not_observable", "unsupported"]
+            }
+          }
+        }
+      }
+    },
+    "enumLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "enum"],
+      "properties": {
+        "kind": { "const": "enum" },
+        "enum": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value"],
+          "properties": { "value": { "$ref": "#/$defs/opaqueRef" } }
+        }
+      }
+    },
+    "structuredLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "structured"],
+      "properties": {
+        "kind": { "const": "structured" },
+        "structured": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fields"],
+          "properties": {
+            "fields": {
+              "type": "array",
+              "description": "Fields must be strictly ascending by name.",
+              "maxItems": 64,
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "value"],
+                "properties": {
+                  "name": { "$ref": "#/$defs/opaqueRef" },
+                  "value": { "$ref": "#/$defs/structuredScalar" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "structuredScalar": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "enum"],
+          "properties": {
+            "kind": { "const": "enum" },
+            "enum": { "$ref": "#/$defs/opaqueRef" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "number"],
+          "properties": {
+            "kind": { "const": "number" },
+            "number": { "type": "number", "minimum": -1000000000000000, "maximum": 1000000000000000 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "integer"],
+          "properties": {
+            "kind": { "const": "integer" },
+            "integer": { "type": "integer" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "boolean"],
+          "properties": {
+            "kind": { "const": "boolean" },
+            "boolean": { "type": "boolean" }
+          }
+        }
+      ]
+    },
+    "countLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "count"],
+      "properties": {
+        "kind": { "const": "count" },
+        "count": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value"],
+          "properties": { "value": { "type": "integer", "minimum": 0, "maximum": 1000000000 } }
+        }
+      }
+    },
+    "metricLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "metric"],
+      "properties": {
+        "kind": { "const": "metric" },
+        "metric": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "unit"],
+          "properties": {
+            "value": { "type": "number", "minimum": -1000000000000000, "maximum": 1000000000000000 },
+            "unit": { "$ref": "#/$defs/opaqueRef" }
+          }
+        }
+      }
+    },
+    "detectionLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "detection"],
+      "properties": {
+        "kind": { "const": "detection" },
+        "detection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["objects"],
+          "properties": {
+            "objects": {
+              "type": "array",
+              "maxItems": 2000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["label", "region"],
+                "properties": {
+                  "label": { "$ref": "#/$defs/opaqueRef" },
+                  "region": { "$ref": "#/$defs/normalizedRegion" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "normalizedRegion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 1 },
+        "y": { "type": "number", "minimum": 0, "maximum": 1 },
+        "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+      }
+    },
+    "eventLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "event"],
+      "properties": {
+        "kind": { "const": "event" },
+        "event": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "occurred"],
+          "properties": {
+            "type": { "$ref": "#/$defs/opaqueRef" },
+            "occurred": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+interface:
+  display_name: "CosmoEdge Device Lab"
+  short_description: "Run bounded zero-write adaptive device probes"
+  default_prompt: "Use $cosmoedge-device-lab to validate this change against the authorized device with adaptive zero-write probes."
+policy:
+  allow_implicit_invocation: true

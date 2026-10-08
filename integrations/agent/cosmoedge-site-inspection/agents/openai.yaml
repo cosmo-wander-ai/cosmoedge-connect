@@ -1,0 +1,7 @@
+interface:
+  display_name: "CosmoEdge Site Inspection"
+  short_description: "Query inspections available at the bound CosmoEdge device"
+  default_prompt: "Use $cosmoedge-site-inspection to show what can be inspected at this CosmoEdge device."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "inspection.analysis.v2",
+  "binding": {
+    "resultId": "result_demo_0001",
+    "runId": "run_demo_0001",
+    "stepId": "step_demo_0001",
+    "targetId": "zone-alpha",
+    "criterionId": "scene-condition",
+    "criterionVersion": "1",
+    "outputKind": "detection",
+    "outputSchemaVersion": "finding.v2",
+    "usage": "inspection",
+    "timeWindow": {
+      "startAt": "2026-07-18T03:00:04Z",
+      "endAt": "2026-07-18T03:00:04Z"
+    },
+    "sourceMedia": [
+      {
+        "sourceRef": "source_demo_0001",
+        "mediaRef": "media_demo_frame_0001",
+        "sha256": "8888888888888888888888888888888888888888888888888888888888888888",
+        "capturedAt": "2026-07-18T03:00:04Z",
+        "freshnessMs": 1000,
+        "sampleOrdinal": 1
+      }
+    ]
+  },
+  "analyzer": {
+    "kind": "fixture",
+    "adapterVersion": "1.0.0",
+    "modelPolicy": "fixture-scene-condition",
+    "resolvedModelVersion": "fixture-v2",
+    "promptTemplateId": "scene-condition-json",
+    "promptTemplateVersion": "2.0.0",
+    "promptTemplateSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  },
+  "candidate": {
+    "assessment": "needs_attention",
+    "observability": "partially_visible",
+    "confidence": 0.91,
+    "value": {
+      "kind": "detection",
+      "detection": {
+        "objects": [
+          {
+            "label": "condition-marker",
+            "score": 0.91,
+            "region": {
+              "x": 0.38,
+              "y": 0.44,
+              "width": 0.24,
+              "height": 0.18
+            },
+            "evidenceRef": "media_demo_frame_0001"
+          }
+        ]
+      }
+    },
+    "evidenceRefs": ["media_demo_frame_0001"],
+    "limitations": ["occlusion"],
+    "reasonCodes": ["criterion_violated"]
+  },
+  "execution": {
+    "attempt": 1,
+    "startedAt": "2026-07-18T03:00:05Z",
+    "completedAt": "2026-07-18T03:00:08Z",
+    "latencyMs": 3000,
+    "temporaryResourcesCreated": 1,
+    "temporaryResourcesCleaned": 1,
+    "persistentConfigWrites": 0
+  },
+  "integrity": {
+    "rawOutputSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "contractSha256": "3333333333333333333333333333333333333333333333333333333333333333"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "^Read$",
+      "hooks": [{
+        "type": "command",
+        "command": "/usr/bin/python3 \"${CODEBUDDY_PLUGIN_ROOT}/scripts/post_read.py\"",
+        "timeout": 5
+      }]
+    }]
+  }
+}

@@ -1,0 +1,7 @@
+# Keep source inventories identical across native checkouts.
+* text=auto eol=lf
+internal/parity/testdata/*.json text eol=lf
+# These assets are bound to exact SHA-256 values in their fixture manifest.
+internal/inspectionfixture/testdata/assets/** -text
+# These are byte-preserved upstream notices with an explicit checksum index.
+third_party/licenses/** -text -whitespace

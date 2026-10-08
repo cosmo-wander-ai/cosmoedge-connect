@@ -1,0 +1,223 @@
+{
+  "schema": "cosmoedge.inspection.dataset.v2",
+  "tenantId": "tenant_scope_demo",
+  "siteId": "site_scope_demo",
+  "datasetId": "scene-condition-baseline-v2",
+  "revision": 1,
+  "purposeRef": "scene-condition-evaluation",
+  "authorityRef": "authority-dataset-intake-01",
+  "principalSha256": "9999999999999999999999999999999999999999999999999999999999999999",
+  "policy": {
+    "schema": "cosmoedge.inspection.dataset.policy.v2",
+    "allowedKinds": ["image"],
+    "allowedPrivacyClasses": ["internal"],
+    "requiredRetentionPolicyRefs": ["dataset-retention-v2"],
+    "retainUntil": "2027-07-19T08:00:00Z",
+    "minimumRemainingRetentionSeconds": 86400,
+    "reviewPolicyRef": "review-policy-01",
+    "minimumApprovals": 1,
+    "adjacentSourceWindowSeconds": 3600
+  },
+  "items": [
+    {
+      "schema": "cosmoedge.inspection.dataset.item.v2",
+      "itemId": "item-01",
+      "mediaRef": "media_00000000000000000000000000000001",
+      "expectedKind": "image",
+      "expectedMime": "image/png",
+      "expectedSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "groupRef": "group-01",
+      "split": "train",
+      "label": {
+        "kind": "classification",
+        "classification": { "value": "needs_attention" }
+      },
+      "reviews": [
+        {
+          "schema": "cosmoedge.inspection.dataset.review.v2",
+          "reviewId": "review-01",
+          "state": "approved",
+          "reviewerSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "descriptorSha256": "1010101010101010101010101010101010101010101010101010101010101010",
+          "labelSha256": "2020202020202020202020202020202020202020202020202020202020202020",
+          "policyRef": "review-policy-01",
+          "reviewedAt": "2026-07-19T07:10:00Z"
+        }
+      ]
+    },
+    {
+      "schema": "cosmoedge.inspection.dataset.item.v2",
+      "itemId": "item-02",
+      "mediaRef": "media_00000000000000000000000000000002",
+      "expectedKind": "image",
+      "expectedMime": "image/png",
+      "expectedSha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "groupRef": "group-02",
+      "split": "train",
+      "label": {
+        "kind": "enum",
+        "enum": { "value": "nominal" }
+      },
+      "reviews": [
+        {
+          "schema": "cosmoedge.inspection.dataset.review.v2",
+          "reviewId": "review-01",
+          "state": "approved",
+          "reviewerSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "descriptorSha256": "3030303030303030303030303030303030303030303030303030303030303030",
+          "labelSha256": "4040404040404040404040404040404040404040404040404040404040404040",
+          "policyRef": "review-policy-01",
+          "reviewedAt": "2026-07-19T07:20:00Z"
+        }
+      ]
+    },
+    {
+      "schema": "cosmoedge.inspection.dataset.item.v2",
+      "itemId": "item-03",
+      "mediaRef": "media_00000000000000000000000000000003",
+      "expectedKind": "image",
+      "expectedMime": "image/png",
+      "expectedSha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "groupRef": "group-03",
+      "split": "train",
+      "label": {
+        "kind": "structured",
+        "structured": {
+          "fields": [
+            {
+              "name": "condition",
+              "value": { "kind": "enum", "enum": "nominal" }
+            },
+            {
+              "name": "visible",
+              "value": { "kind": "boolean", "boolean": true }
+            }
+          ]
+        }
+      },
+      "reviews": [
+        {
+          "schema": "cosmoedge.inspection.dataset.review.v2",
+          "reviewId": "review-01",
+          "state": "approved",
+          "reviewerSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "descriptorSha256": "5050505050505050505050505050505050505050505050505050505050505050",
+          "labelSha256": "6060606060606060606060606060606060606060606060606060606060606060",
+          "policyRef": "review-policy-01",
+          "reviewedAt": "2026-07-19T07:30:00Z"
+        }
+      ]
+    },
+    {
+      "schema": "cosmoedge.inspection.dataset.item.v2",
+      "itemId": "item-04",
+      "mediaRef": "media_00000000000000000000000000000004",
+      "expectedKind": "image",
+      "expectedMime": "image/png",
+      "expectedSha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "groupRef": "group-04",
+      "split": "validation",
+      "label": {
+        "kind": "count",
+        "count": { "value": 4 }
+      },
+      "reviews": [
+        {
+          "schema": "cosmoedge.inspection.dataset.review.v2",
+          "reviewId": "review-01",
+          "state": "approved",
+          "reviewerSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "descriptorSha256": "7070707070707070707070707070707070707070707070707070707070707070",
+          "labelSha256": "8080808080808080808080808080808080808080808080808080808080808080",
+          "policyRef": "review-policy-01",
+          "reviewedAt": "2026-07-19T07:40:00Z"
+        }
+      ]
+    },
+    {
+      "schema": "cosmoedge.inspection.dataset.item.v2",
+      "itemId": "item-05",
+      "mediaRef": "media_00000000000000000000000000000005",
+      "expectedKind": "image",
+      "expectedMime": "image/png",
+      "expectedSha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "groupRef": "group-05",
+      "split": "validation",
+      "label": {
+        "kind": "metric",
+        "metric": { "value": 0.75, "unit": "ratio" }
+      },
+      "reviews": [
+        {
+          "schema": "cosmoedge.inspection.dataset.review.v2",
+          "reviewId": "review-01",
+          "state": "approved",
+          "reviewerSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "descriptorSha256": "9090909090909090909090909090909090909090909090909090909090909090",
+          "labelSha256": "abababababababababababababababababababababababababababababababab",
+          "policyRef": "review-policy-01",
+          "reviewedAt": "2026-07-19T07:50:00Z"
+        }
+      ]
+    },
+    {
+      "schema": "cosmoedge.inspection.dataset.item.v2",
+      "itemId": "item-06",
+      "mediaRef": "media_00000000000000000000000000000006",
+      "expectedKind": "image",
+      "expectedMime": "image/png",
+      "expectedSha256": "6666666666666666666666666666666666666666666666666666666666666666",
+      "groupRef": "group-06",
+      "split": "test",
+      "label": {
+        "kind": "detection",
+        "detection": {
+          "objects": [
+            {
+              "label": "reference-object",
+              "region": { "x": 0.1, "y": 0.2, "width": 0.3, "height": 0.4 }
+            }
+          ]
+        }
+      },
+      "reviews": [
+        {
+          "schema": "cosmoedge.inspection.dataset.review.v2",
+          "reviewId": "review-01",
+          "state": "approved",
+          "reviewerSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "descriptorSha256": "bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc",
+          "labelSha256": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+          "policyRef": "review-policy-01",
+          "reviewedAt": "2026-07-19T08:00:00Z"
+        }
+      ]
+    },
+    {
+      "schema": "cosmoedge.inspection.dataset.item.v2",
+      "itemId": "item-07",
+      "mediaRef": "media_00000000000000000000000000000007",
+      "expectedKind": "image",
+      "expectedMime": "image/png",
+      "expectedSha256": "7777777777777777777777777777777777777777777777777777777777777777",
+      "groupRef": "group-07",
+      "split": "test",
+      "label": {
+        "kind": "event",
+        "event": { "type": "condition-change", "occurred": true }
+      },
+      "reviews": [
+        {
+          "schema": "cosmoedge.inspection.dataset.review.v2",
+          "reviewId": "review-01",
+          "state": "approved",
+          "reviewerSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "descriptorSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "labelSha256": "efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
+          "policyRef": "review-policy-01",
+          "reviewedAt": "2026-07-19T08:10:00Z"
+        }
+      ]
+    }
+  ]
+}

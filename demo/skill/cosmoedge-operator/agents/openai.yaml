@@ -1,0 +1,4 @@
+interface:
+  display_name: "CosmoEdge 设备运营"
+  short_description: "查询单设备运营事实并接力常用运营动作"
+  default_prompt: "Use $cosmoedge-operator to answer the user's single-device operations question or open the exact local task, parameter, or video-source action for final confirmation."

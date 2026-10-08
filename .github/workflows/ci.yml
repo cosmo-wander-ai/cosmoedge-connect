@@ -1,0 +1,99 @@
+name: CosmoEdge Connect checks
+
+on:
+  push:
+    branches: [main, dev, 'codex/**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Go tests
+        run: go test -p 1 -count=1 ./...
+      - name: Go vet
+        run: go vet ./...
+      - name: Windows Python test suites
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./scripts/test-windows-python.ps1
+      - name: Python clients
+        if: runner.os != 'Windows'
+        run: python -m unittest discover -s integrations/workbuddy/tests -v
+      - name: macOS installer unit tests
+        if: runner.os != 'Windows'
+        run: python -m unittest discover -s integrations/workbuddy/deploy/macos/tests -v
+      - name: Windows installer unit tests
+        if: runner.os != 'Windows'
+        run: python -m unittest discover -s integrations/workbuddy/deploy/windows/tests -v
+      - name: Package builder tests
+        if: runner.os != 'Windows'
+        run: python -m unittest discover -s scripts/tests -v
+      - name: Documentation links
+        run: python scripts/check-docs.py
+      - name: Build public commands
+        shell: bash
+        run: |
+          mkdir -p output/bin
+          go build -o output/bin/ ./cmd/cosmoedge-connect ./cmd/cosmoedge-mcp
+      - name: Synthetic MCP client workflow
+        shell: bash
+        run: |
+          adapter=./output/bin/cosmoedge-mcp
+          if [ "$RUNNER_OS" = "Windows" ]; then adapter="${adapter}.exe"; fi
+          go run ./examples/mcp-client --server "$adapter" --mock
+      - name: Race checks
+        if: runner.os == 'Linux'
+        run: go test -race -p 1 -count=1 ./internal/operations/... ./internal/operator/... ./internal/mcpbridge/... ./cmd/cosmoedge-connect ./cmd/cosmoedge-mcp
+
+  windows-lifecycle:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          # Match the packaged Go runtime notice inventory.
+          go-version: '1.26.5'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Native Windows isolated install and MCP lifecycle
+        shell: pwsh
+        run: |
+          $connectPackagePath = Join-Path $env:RUNNER_TEMP 'cosmoedge-ci-package'
+          python scripts/build-connect-windows.py --with-mcp --version 'ci-${{ github.run_id }}-${{ github.run_attempt }}' --output $connectPackagePath
+          if ($LASTEXITCODE -ne 0) { throw 'Windows paired build failed.' }
+          $connectManifestHash = (Get-FileHash -LiteralPath (Join-Path $connectPackagePath 'manifest.json') -Algorithm SHA256).Hash.ToLowerInvariant()
+          ./scripts/test-windows-lifecycle.ps1 -Bundle $connectPackagePath -ExpectedManifestSHA256 $connectManifestHash
+      - name: Save the native-tested Windows package
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-paired-${{ github.sha }}
+          path: ${{ runner.temp }}/cosmoedge-ci-package
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7

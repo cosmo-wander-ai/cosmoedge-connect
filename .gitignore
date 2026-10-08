@@ -1,0 +1,9 @@
+/cosmoedge-operator
+/cosmoedge-operator.exe
+/.parity/
+/data/
+/output/
+/build/
+__pycache__/
+*.py[cod]
+.DS_Store

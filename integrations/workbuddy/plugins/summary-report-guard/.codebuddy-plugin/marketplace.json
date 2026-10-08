@@ -1,0 +1,10 @@
+{
+  "name": "cosmoedge-summary-report-guard-local",
+  "owner": {"name": "CosmoEdge Connect"},
+  "plugins": [{
+    "name": "cosmoedge-summary-report-guard",
+    "version": "0.1.0",
+    "source": "./plugins/cosmoedge-summary-report-guard",
+    "description": "Preserve original CosmoEdge Connect statistical reports for delivery without returning their body through Read."
+  }]
+}

@@ -1,0 +1,6 @@
+{
+  "name": "cosmoedge-summary-report-guard",
+  "version": "0.1.0",
+  "description": "Replace only private, candidate-bound CosmoEdge Connect report Read results with a delivery notice.",
+  "author": {"name": "CosmoEdge Connect"}
+}

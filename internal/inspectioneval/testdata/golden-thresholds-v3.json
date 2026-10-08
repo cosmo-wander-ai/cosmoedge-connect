@@ -1,0 +1,29 @@
+{
+  "schema": "cosmoedge.inspection.eval.thresholds.v3",
+  "minimumTestRecords": 9,
+  "minimumTestSites": 2,
+  "requiredStrategies": [
+    "clip_analysis",
+    "existing_task_read",
+    "hybrid_analysis",
+    "snapshot_analysis"
+  ],
+  "requiredResultKinds": [
+    "classification",
+    "count",
+    "detection",
+    "enum",
+    "event",
+    "metric",
+    "structured"
+  ],
+  "minimumDeliveryReliability": 0.3,
+  "maximumDeliveryUnknownRate": 0.25,
+  "maximumFalseClearRate": 0,
+  "minimumHelpfulFeedback": 1,
+  "minimumUnhelpfulFeedback": 1,
+  "minimumMissingFeedback": 1,
+  "minimumUnknownDeliveries": 2,
+  "minimumFailedDeliveries": 1,
+  "minimumRetriedDeliveries": 2
+}

@@ -1,0 +1,390 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cosmoedge-connect.local/schemas/inspection/analysis-result.v2.json",
+  "title": "CosmoEdge inspection typed analysis envelope v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "binding", "analyzer", "candidate", "execution", "integrity"],
+  "properties": {
+    "schemaVersion": { "const": "inspection.analysis.v2" },
+    "binding": { "$ref": "#/$defs/binding" },
+    "analyzer": { "$ref": "#/$defs/analyzer" },
+    "candidate": { "$ref": "#/$defs/candidate" },
+    "execution": { "$ref": "#/$defs/execution" },
+    "integrity": { "$ref": "#/$defs/integrity" },
+    "displayPolicy": { "$ref": "#/$defs/displayPolicy" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "candidate": { "required": ["displayText"] } }
+      },
+      "then": {
+        "required": ["displayPolicy"],
+        "properties": {
+          "binding": {
+            "properties": { "usage": { "const": "temporary_observation" } }
+          }
+        }
+      },
+      "else": { "not": { "required": ["displayPolicy"] } }
+    }
+  ],
+  "$defs": {
+    "publicRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "opaqueId": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 96,
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resultKind": {
+      "enum": ["classification", "enum", "structured", "metric", "detection", "count", "event"]
+    },
+    "timeWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startAt", "endAt"],
+      "properties": {
+        "startAt": { "$ref": "#/$defs/timestamp" },
+        "endAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "sourceMedia": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceRef", "mediaRef", "sha256", "capturedAt", "freshnessMs", "sampleOrdinal"],
+      "properties": {
+        "sourceRef": { "$ref": "#/$defs/publicRef" },
+        "mediaRef": { "$ref": "#/$defs/opaqueId" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "capturedAt": { "$ref": "#/$defs/timestamp" },
+        "freshnessMs": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "sampleOrdinal": { "type": "integer", "minimum": 1, "maximum": 100 }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resultId", "runId", "stepId", "targetId", "criterionId", "criterionVersion",
+        "outputKind", "outputSchemaVersion", "usage", "timeWindow", "sourceMedia"
+      ],
+      "properties": {
+        "resultId": { "$ref": "#/$defs/publicRef" },
+        "runId": { "$ref": "#/$defs/publicRef" },
+        "stepId": { "$ref": "#/$defs/publicRef" },
+        "targetId": { "$ref": "#/$defs/publicRef" },
+        "criterionId": { "$ref": "#/$defs/publicRef" },
+        "criterionVersion": { "$ref": "#/$defs/publicRef" },
+        "outputKind": { "$ref": "#/$defs/resultKind" },
+        "outputSchemaVersion": { "$ref": "#/$defs/publicRef" },
+        "usage": { "enum": ["inspection", "temporary_observation"] },
+        "timeWindow": { "$ref": "#/$defs/timeWindow" },
+        "sourceMedia": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": { "$ref": "#/$defs/sourceMedia" }
+        }
+      }
+    },
+    "analyzer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind", "adapterVersion", "modelPolicy", "promptTemplateId",
+        "promptTemplateVersion", "promptTemplateSha256"
+      ],
+      "properties": {
+        "kind": { "enum": ["cv", "vlm", "hybrid", "event", "fixture"] },
+        "adapterVersion": { "$ref": "#/$defs/publicRef" },
+        "modelPolicy": { "$ref": "#/$defs/publicRef" },
+        "resolvedModelVersion": { "$ref": "#/$defs/publicRef" },
+        "promptTemplateId": { "$ref": "#/$defs/publicRef" },
+        "promptTemplateVersion": { "$ref": "#/$defs/publicRef" },
+        "promptTemplateSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessment", "observability", "evidenceRefs", "limitations", "reasonCodes"],
+      "properties": {
+        "assessment": { "enum": ["meets_rule", "needs_attention", "uncertain", "not_observable", "unsupported"] },
+        "observability": { "enum": ["fully_visible", "partially_visible", "not_visible", "unusable"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "value": { "$ref": "#/$defs/resultValue" },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/opaqueId" }
+        },
+        "limitations": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "occlusion", "low_light", "glare", "motion_blur", "low_resolution",
+              "out_of_frame", "stale_capture", "insufficient_samples", "conflicting_samples",
+              "criterion_not_visual", "analyzer_limit"
+            ]
+          }
+        },
+        "reasonCodes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "criterion_met", "criterion_violated", "insufficient_evidence", "not_visible",
+              "unusable_media", "invalid_model_output", "analyzer_timeout",
+              "unsupported_criterion", "inconsistent_samples"
+            ]
+          }
+        },
+        "displayText": { "type": "string", "minLength": 1, "maxLength": 1024 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "assessment": { "enum": ["meets_rule", "needs_attention"] } } },
+          "then": {
+            "required": ["value"],
+            "properties": { "evidenceRefs": { "minItems": 1 } }
+          },
+          "else": { "not": { "required": ["value"] } }
+        }
+      ]
+    },
+    "resultValue": {
+      "oneOf": [
+        { "$ref": "#/$defs/classificationValue" },
+        { "$ref": "#/$defs/enumValue" },
+        { "$ref": "#/$defs/structuredValue" },
+        { "$ref": "#/$defs/metricValue" },
+        { "$ref": "#/$defs/detectionValue" },
+        { "$ref": "#/$defs/countValue" },
+        { "$ref": "#/$defs/eventValue" }
+      ]
+    },
+    "classificationValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "classification"],
+      "properties": {
+        "kind": { "const": "classification" },
+        "classification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label"],
+          "properties": {
+            "label": { "$ref": "#/$defs/publicRef" },
+            "score": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        }
+      }
+    },
+    "enumValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "enum"],
+      "properties": {
+        "kind": { "const": "enum" },
+        "enum": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value"],
+          "properties": { "value": { "$ref": "#/$defs/publicRef" } }
+        }
+      }
+    },
+    "structuredValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "structured"],
+      "properties": {
+        "kind": { "const": "structured" },
+        "structured": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fields"],
+          "properties": {
+            "fields": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 32,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "value"],
+                "properties": {
+                  "name": { "$ref": "#/$defs/publicRef" },
+                  "value": { "$ref": "#/$defs/structuredScalar" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "structuredScalar": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false, "required": ["kind", "enum"],
+          "properties": { "kind": { "const": "enum" }, "enum": { "$ref": "#/$defs/publicRef" } }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["kind", "number"],
+          "properties": { "kind": { "const": "number" }, "number": { "type": "number" } }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["kind", "integer"],
+          "properties": { "kind": { "const": "integer" }, "integer": { "type": "integer" } }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["kind", "boolean"],
+          "properties": { "kind": { "const": "boolean" }, "boolean": { "type": "boolean" } }
+        }
+      ]
+    },
+    "metricValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "metric"],
+      "properties": {
+        "kind": { "const": "metric" },
+        "metric": {
+          "type": "object", "additionalProperties": false, "required": ["value", "unit"],
+          "properties": { "value": { "type": "number" }, "unit": { "$ref": "#/$defs/publicRef" } }
+        }
+      }
+    },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 1 },
+        "y": { "type": "number", "minimum": 0, "maximum": 1 },
+        "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+      }
+    },
+    "detectionValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "detection"],
+      "properties": {
+        "kind": { "const": "detection" },
+        "detection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["objects"],
+          "properties": {
+            "objects": {
+              "type": "array",
+              "maxItems": 64,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["label", "region", "evidenceRef"],
+                "properties": {
+                  "label": { "$ref": "#/$defs/publicRef" },
+                  "score": { "type": "number", "minimum": 0, "maximum": 1 },
+                  "region": { "$ref": "#/$defs/region" },
+                  "evidenceRef": { "$ref": "#/$defs/opaqueId" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "countValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "count"],
+      "properties": {
+        "kind": { "const": "count" },
+        "count": {
+          "type": "object", "additionalProperties": false, "required": ["value", "label", "unit"],
+          "properties": {
+            "value": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+            "label": { "$ref": "#/$defs/publicRef" },
+            "unit": { "$ref": "#/$defs/publicRef" }
+          }
+        }
+      }
+    },
+    "eventValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "event"],
+      "properties": {
+        "kind": { "const": "event" },
+        "event": {
+          "type": "object", "additionalProperties": false,
+          "required": ["type", "state", "occurredAt", "evidenceRef"],
+          "properties": {
+            "type": { "$ref": "#/$defs/publicRef" },
+            "state": { "enum": ["occurred", "started", "active", "ended"] },
+            "occurredAt": { "$ref": "#/$defs/timestamp" },
+            "evidenceRef": { "$ref": "#/$defs/opaqueId" }
+          }
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt", "startedAt", "completedAt", "latencyMs",
+        "temporaryResourcesCreated", "temporaryResourcesCleaned", "persistentConfigWrites"
+      ],
+      "properties": {
+        "attempt": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "startedAt": { "$ref": "#/$defs/timestamp" },
+        "completedAt": { "$ref": "#/$defs/timestamp" },
+        "latencyMs": { "type": "integer", "minimum": 0, "maximum": 3600000 },
+        "temporaryResourcesCreated": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "temporaryResourcesCleaned": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "persistentConfigWrites": { "const": 0 }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rawOutputSha256", "contractSha256"],
+      "properties": {
+        "rawOutputSha256": { "$ref": "#/$defs/sha256" },
+        "contractSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "displayPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyRef", "locale", "maxRunes"],
+      "properties": {
+        "policyRef": { "$ref": "#/$defs/publicRef" },
+        "locale": { "$ref": "#/$defs/publicRef" },
+        "maxRunes": { "type": "integer", "minimum": 1, "maximum": 1024 }
+      }
+    }
+  }
+}
