@@ -4,11 +4,22 @@
 
 **Delegate routine site operations to your AI assistant.**
 
-Hand over a task, receive a useful result with its source evidence, and handle
-the exceptions that need your judgment. CosmoEdge Connect gives your assistant
-access to an existing device's alarms, source images and confirmed operations.
-Built for site teams and the partners who turn their working practices into
-repeatable assistant workflows.
+CosmoEdge is an open-source edge video AI system. It receives camera video, runs
+vision models on edge devices for continuous detection, and provides a visual
+interface for configuring tasks, viewing images and managing alarms and events.
+Partners can use it to build video analysis applications for stores, warehouses,
+campuses and production sites.
+
+Explore the existing system: [CosmoEdge project](https://github.com/cosmo-wander-ai/cosmo-edge) · [Website](https://www.cosmowander.ai/)
+
+**CosmoEdge Connect is the local connector that lets AI assistants use an already
+deployed CosmoEdge system.** Reviewing alarms, finding sources, retrieving images
+and preparing a handover often mean repeatedly operating the system yourself.
+Connect gives the assistant access to existing queries, images and confirmed
+changes to detection tasks. Hand over the whole task, receive a useful result with its
+source evidence, and focus on judgment, exceptions and on-site follow-up.
+Built for teams with a deployed CosmoEdge system and the partners and developers
+who turn their working practices into assistant workflows.
 
 > Prepare my shift handover: review yesterday's retained alarms at the back door
 > and receiving area, get one image from each of those sources, and use our aisle
@@ -43,31 +54,33 @@ device changes retain local confirmation.
 
 ## How Connect and the assistant share the work
 
-Connect runs on your computer and reaches one selected CosmoEdge device. Use an
-AI client that supports local MCP, or the paired WorkBuddy integration. MCP is
-the interface a host uses to call tools; you describe the task in ordinary language.
+Connect runs on your computer and reaches the CosmoEdge system on one selected
+device and its existing sources. Use an AI client that supports local MCP, or the
+paired WorkBuddy integration. MCP is the interface a host uses to call tools;
+you describe the task in ordinary language.
 
 | Responsibility | Who provides it |
 | --- | --- |
 | Task scope, review rules and decisions on exceptions | Site staff and their integration partner |
 | Planning, model-based review, scheduling, notifications and task policy | The chosen AI host and its configured integration |
-| Device access, alarm queries, source images, original retrieval and confirmed operations | CosmoEdge Connect |
-| Continuous detection under the device's existing configuration | Deployed CosmoEdge edge algorithms |
+| Access to the deployed CosmoEdge system, alarm queries, source images, original retrieval and confirmed operations | CosmoEdge Connect |
+| Camera video, visual task configuration and image viewing, continuous detection with edge vision models, and alarm/event management | CosmoEdge system (one device and its existing sources) |
 
 ```mermaid
 flowchart LR
     User[Delegate a task and agree its rules] --> Assistant[AI assistant organizes the work]
     Assistant <--> Connect[CosmoEdge Connect tools and originals]
-    Connect <--> Device[One CosmoEdge device and its sources]
+    Connect <--> System["CosmoEdge system: one device and its existing sources"]
     Assistant --> Results[Brief · Items for review · Originals]
     Results --> Review[Receive the result and handle exceptions]
     Host[Host scheduling and notifications] -. Integration pattern .-> Assistant
 ```
 
-Existing edge detection and on-demand image review can work together: one runs
-the configured detection, while the other helps examine questions as they arise.
-Partners can first test whether a role's question is answered usefully, then
-decide whether to develop a dedicated detector or a broader workflow.
+CosmoEdge's edge vision models continuously process video under their configured
+tasks, producing detection results and events. The assistant organizes queries,
+on-demand image review and material for operational tasks such as handovers,
+reviews and maintenance. Partners can first test whether a role's question is
+answered usefully, then refine the detection configuration or extend the workflow.
 
 ## Turn site knowledge into an ongoing service
 
