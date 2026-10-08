@@ -1,67 +1,149 @@
 # CosmoEdge Connect
 
-**English** | [简体中文](README.zh-CN.md)
+**English** | [简体中文](README.zh-CN.md) · **Alpha · Source preview**
 
-Connect AI assistants to CosmoEdge to query alarms, view source images, and
-enable or disable installed algorithms.
+**Give your AI assistant a view of your site, access to its records, and a way to help operate it.**
 
-The local service manages the device connection and execution. AI clients use
-MCP or the paired WorkBuddy integration to request operations and receive results.
+Connect CosmoEdge alarms, camera images and device operations to the AI assistant
+you use. Ask a question, get source evidence, follow up, and confirm a specific
+action when needed. Built for teams with an existing CosmoEdge device and for
+developers building workflows for them.
 
-| What you want to do | What CosmoEdge Connect provides |
-| --- | --- |
-| “How many alarms were recorded at the east and west gates yesterday?” | Query retained records by time, source and algorithm, returning statistics and the original report |
-| “Check whether anyone is in this view, and give me the image.” | Acquire the original source image for the host model to analyze, and retain it for follow-up questions |
-| “Pause this algorithm, then restore its original settings.” | Prepare a change, execute it after confirmation on the local page, and read back device state |
+[Explore a workflow](docs/scenarios.md) · [Connect your device](docs/getting-started.md) · [Try without a device](#try-without-a-device)
 
-The current scope is one CosmoEdge device. The host model interprets images;
-alarm summaries state the scope actually read. Enable/disable operations use
-existing sources and installed algorithms, preserving their parameters, regions
-and schedules.
+![Illustrative workflow: query alarms for statistics and the original report, request a source image and ask follow-up questions, then prepare a device change for local confirmation and state verification. Not a client screenshot.](docs/assets/connect-workflow.svg)
+
+## Connect your AI assistant to your site
+
+CosmoEdge manages site cameras and deployed detection algorithms. Connect runs
+on your computer to reach the device, retrieve original material and carry out
+operations. Your AI assistant handles the conversation and uses its host model
+to interpret the images it receives.
+
+```mermaid
+flowchart LR
+    User[Your request] --> Assistant[AI assistant]
+    Assistant <--> Connect[CosmoEdge Connect]
+    Connect <--> Device[One CosmoEdge device and its sources]
+    Assistant --> Results[Statistics and reports · Images · Operation results]
+    Results --> User
+```
+
+Use an AI client that supports local MCP, or the paired WorkBuddy integration.
+MCP is the interface an AI client uses to call tools; you still describe your task
+in ordinary language.
+
+## Start with a question from your workday
+
+Site handovers, store checks and factory maintenance all involve finding records,
+looking at a scene or adjusting a detection task. Source names below are examples;
+use the sources and algorithms already installed on your device.
+
+| When to use it | What to ask | What you get |
+| --- | --- | --- |
+| **Handovers and operational reviews** | “What alarms were recorded at the east and west gates yesterday? Group them by category and give me the original report.” | Statistics and a report queried by time window, source and algorithm, reducing manual filtering and compilation |
+| **An on-demand look at your site** | “Get an image of the loading area. What is stored near the aisle? Give me the original image.” | A source image and the host model's interpretation; “What is on the right in that image?” reuses the same original |
+| **Maintenance and device operations** | “Prepare to pause this detection task in the loading area, keeping its settings.” | A specific proposal, local confirmation and a check of device state after execution; resuming requires another request and confirmation |
+
+Combine these steps in one working conversation: review the alarm distribution,
+request an image from a selected source, then prepare to pause or resume a task
+if the site team has decided to carry out maintenance. Reports and images remain
+available for follow-up questions, and changes have an explicit confirmation and
+verification step.
+
+[Walk through a complete example: from handover to maintenance →](docs/scenarios.md)
+
+## Combine established detection with questions as they arise
+
+Deployed edge algorithms keep running their configured detection tasks. When
+someone has a new question about people, objects or the use of a space, they can
+request a still image and discuss it with the host model while keeping the original
+in view. This provides a person-initiated way to look into questions that do not
+yet have a dedicated detector.
+
+Developers can combine queries, image requests and confirmed operations into their
+own handover, review or maintenance workflows. See [MCP integration](docs/mcp.md)
+for the public tools and [operations](docs/operations.md) for interpreting results
+and handling changes.
 
 ## Getting started
 
-1. Follow [installation](docs/installation.md) to install the local service or
-   build it from source.
-2. Connect a device through the CosmoEdge Connect local page.
-3. Configure an [MCP client](docs/mcp.md), or use the paired WorkBuddy Skill.
+**Have a CosmoEdge device?** You need a computer that can reach it, with sources
+and algorithms already installed on the device.
+
+1. Follow [installation](docs/installation.md) to build and install the local
+   service and paired client.
+2. Configure an [MCP client](docs/mcp.md), or import the paired WorkBuddy Skill.
+3. Ask the assistant to “Connect to a CosmoEdge device,” then enter the device
+   details on the local page it opens.
 4. Follow the [quickstart](docs/getting-started.md) for your first query, image
    request and operation.
 
-This is an alpha source preview. See [compatibility](docs/compatibility.md) for
-the platform checks and the scope of this release. Package, client and device
-acceptance must match the specific build being used. WeChat,
-remote/cloud MCP, multiple devices and scheduled inspections are outside the
-current supported scope.
+**Exploring or evaluating?** Read the [workflow example](docs/scenarios.md), or run
+the simulation below without a device, credentials or an AI account.
 
-## Development and integration
+### Try without a device
 
-Third-party clients should use the public [MCP tool interface](docs/mcp.md).
-The optional [operations Skill (Chinese)](skills/cosmoedge-operations/SKILL.md) provides
-guidance on dates, sources, follow-up questions and result interpretation;
-clients can call the tools without a Skill. WorkBuddy's paired Python client
-also uses a `cosmoedge-operations` Skill; install the version for your chosen
-integration. The official adapter and service are built as a matched pair.
-The internal HTTP API supports the adapter implementation and has no separate
-long-term compatibility commitment.
+Run from the repository root with Go 1.25+, Python 3 and `make`. On Windows, use
+the direct build commands in [development](docs/development.md) and change the
+server path below to `./output/bin/cosmoedge-mcp.exe`.
 
 ```sh
 make build
 go run ./examples/mcp-client --server ./output/bin/cosmoedge-mcp --mock
 ```
 
-These commands build both public executables and run the
-[MCP example without a Skill](examples/mcp-client/main.go) against a synthetic
-service. They exercise tool calls, original artifacts and request recovery
-without a device or credentials. On Windows, use the direct build commands in
-[development](docs/development.md) and append `.exe` to the server path.
+[This example](examples/mcp-client/main.go) calls a local synthetic service through
+the real MCP adapter. It retrieves image content and an original report, prepares
+and cancels a change, and checks request recovery and context isolation. It does
+not call a model, connect to a real device or display an AI client's interface.
 
-Building requires Go 1.25+. The WorkBuddy package also requires Python 3.9+;
-see [development](docs/development.md) for other test dependencies. Adapter
-build commands and invocation flags are documented in [MCP integration](docs/mcp.md).
+Successful JSON output includes these fields (excerpt):
+
+```json
+{
+  "mock": true,
+  "tools": 12,
+  "imageContent": true,
+  "originalReportResource": true,
+  "reviewRequiresUser": true,
+  "captureSubmissions": 1,
+  "syntheticDeviceWrites": 0
+}
+```
+
+`imageContent` and `originalReportResource` mean the program received image content
+and a report resource. `syntheticDeviceWrites: 0` means this simulation performed
+no device writes. For the flow in an actual AI client, follow the
+[quickstart](docs/getting-started.md).
+
+## Current release scope
+
+This is an **alpha source preview**, with source code and development-package
+tooling. See [compatibility](docs/compatibility.md) for platform checks and package
+and client acceptance status.
+
+- **Connection:** one local user, one selected CosmoEdge device and its existing sources.
+- **Records and images:** summaries state the retained-record scope actually read. Image questions use one captured image and the host model; check interpretations against the site. A new image cannot establish the cause of a past alarm.
+- **Device operations:** enable or disable installed algorithms while preserving parameters, regions and schedules. Pausing and resuming each require local confirmation.
+- **Not yet supported:** multiple devices, remote/cloud MCP, WeChat, scheduled inspections or autonomous action without user confirmation.
+
+## Development and integration
+
+Third-party clients should use the public [MCP tool interface](docs/mcp.md).
+The optional [operations Skill (Chinese)](skills/cosmoedge-operations/SKILL.md)
+provides guidance on dates, sources, follow-up questions and result interpretation;
+clients can call the tools without a Skill. WorkBuddy's paired Python client also
+uses a `cosmoedge-operations` Skill; install the version for your chosen integration.
+
+The official adapter and service are built as a matched pair. The internal HTTP
+API supports the adapter implementation and has no separate long-term compatibility
+commitment. The WorkBuddy package also requires Python 3.9+; see
+[development](docs/development.md) for other test dependencies.
 
 | Documentation | Contents |
 | --- | --- |
+| [Workflow examples](docs/scenarios.md) | A sequence of handover, image review and maintenance tasks |
 | [Architecture](docs/architecture.md) | Responsibilities of the service, adapter, Skill and runtime state |
 | [Operations](docs/operations.md) | Counting rules, image sources, request recovery and change outcomes |
 | [Testing](docs/testing.md) | Automated checks, real-client validation and device acceptance |

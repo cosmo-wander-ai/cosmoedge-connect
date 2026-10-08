@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="440" viewBox="0 0 960 440" role="img" aria-labelledby="title description">
+  <title id="title">CosmoEdge Connect：查记录、看现场、确认后操作</title>
+  <desc id="description">场景示意，非客户端运行截图。查询昨天告警集中的机位，取得统计和原报告；查看装卸区原图并继续追问；准备暂停检测并保留设置，在本机确认后核对状态。</desc>
+  <rect x="1" y="1" width="958" height="438" rx="20" fill="#f6f8fc" stroke="#d9e1ec" stroke-width="2"/>
+  <g font-family="system-ui, sans-serif" fill="#17263e">
+    <path d="M34 29h13v13H34zM51 29h13v13H51zM34 46h13v13H34z" fill="#2563eb"/>
+    <path d="M51 46h13v13H51z" fill="#8cb3fb"/>
+    <text x="78" y="52" font-size="27" font-weight="700" letter-spacing="-.6">CosmoEdge Connect</text>
+    <text x="34" y="89" font-size="18" fill="#536279">用自然语言处理三类现场任务</text>
+
+    <g fill="#ffffff" stroke="#d9e1ec" stroke-width="1.5">
+      <rect x="32" y="120" width="288" height="266" rx="14"/>
+      <rect x="336" y="120" width="288" height="266" rx="14"/>
+      <rect x="640" y="120" width="288" height="266" rx="14"/>
+    </g>
+    <g fill="none" stroke="#a3b4cc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M322 255h12m-4-4 4 4-4 4"/>
+      <path d="M626 255h12m-4-4 4 4-4 4"/>
+    </g>
+
+    <g fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M59 146h18l7 7v24H59zM77 146v8h7M65 160h6M65 166h13M65 172h10"/>
+      <rect x="362" y="148" width="31" height="26" rx="3"/>
+      <circle cx="383" cy="155" r="2"/>
+      <path d="m364 170 8-9 7 7 4-4 8 8"/>
+      <path d="M668 150h28M668 161h28M668 172h28"/>
+      <rect x="674" y="146" width="6" height="8" rx="2" fill="#ffffff"/>
+      <rect x="687" y="157" width="6" height="8" rx="2" fill="#ffffff"/>
+      <rect x="676" y="168" width="6" height="8" rx="2" fill="#ffffff"/>
+    </g>
+    <g font-size="15" font-weight="600" fill="#77869b" text-anchor="end">
+      <text x="294" y="164">01</text>
+      <text x="598" y="164">02</text>
+      <text x="902" y="164">03</text>
+    </g>
+    <g font-size="26" font-weight="650">
+      <text x="56" y="212">查记录</text>
+      <text x="360" y="212">看现场</text>
+      <text x="664" y="212">确认后操作</text>
+    </g>
+    <g font-size="21" fill="#394d68">
+      <text x="56" y="254"><tspan x="56">“昨天哪些机位</tspan><tspan x="56" dy="31">告警集中？”</tspan></text>
+      <text x="360" y="254"><tspan x="360">“看一下装卸区，</tspan><tspan x="360" dy="31">给我原图。”</tspan></text>
+      <text x="664" y="254"><tspan x="664">“准备暂停这个检测，</tspan><tspan x="664" dy="31">保留设置。”</tspan></text>
+    </g>
+    <path d="M56 332h240M360 332h240M664 332h240" stroke="#e4eaf3" stroke-width="1.5"/>
+    <g font-size="18" font-weight="600" fill="#24549e">
+      <text x="56" y="360">统计 + 原报告</text>
+      <text x="360" y="360">原图 + 继续追问</text>
+      <text x="664" y="360">本机确认 + 状态核对</text>
+    </g>
+    <text x="480" y="416" text-anchor="middle" font-size="14" fill="#63738b">场景示意 · 非客户端运行截图</text>
+  </g>
+</svg>
