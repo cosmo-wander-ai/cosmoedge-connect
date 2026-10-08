@@ -84,6 +84,11 @@ CosmoEdge 的边缘视觉模型按配置持续处理视频，形成检测结果�
 - 选择并配置宿主，完成流程验证、人员培训，并在机位或业务变化后复测。
 
 这些内容可以随客户的实际使用逐步完善。先从一个岗位、一台设备和一项重复工作开始。
+
+2026 年 7 月 1 日，[Atlassian 披露](https://www.atlassian.com/blog/company-news/inside-rovo-mcp-usage)
+Rovo MCP 每个工作日的工具调用已超 500 万次；[WinCC OA 官方示例](https://github.com/winccoa/winccoa-ae-js-mcpserver)
+也把工业系统接入助手。我们看重这一方向：伙伴的设备接入与业务规则可持续积累，换用助手仍需适配和验证。
+
 公开能力见 [MCP 接入](docs/mcp.zh-CN.md)，结果解释与操作约定见[业务约定（英文）](docs/operations.md)。
 
 ## 开始使用

@@ -89,6 +89,14 @@ to the device catalog, define image-review rules and escalation conditions, and
 test whether the resulting brief helps the next shift. Keep those rules and
 training examples up to date as people, cameras and working practices change.
 
+In its [July 1, 2026 report](https://www.atlassian.com/blog/company-news/inside-rovo-mcp-usage),
+Atlassian said Rovo MCP handled more than five million tool calls per working day.
+The [official WinCC OA example](https://github.com/winccoa/winccoa-ae-js-mcpserver)
+also connects AI assistants to an existing industrial system. We see a useful
+direction for partners here: device integrations and business rules can retain
+their value as assistants gain access to existing systems. Moving to another
+assistant still requires adaptation and validation.
+
 See [MCP integration](docs/mcp.md) for the public tools and
 [operations](docs/operations.md) for evidence and device-change rules.
 
