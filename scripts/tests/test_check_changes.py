@@ -275,7 +275,7 @@ class GitChangeTests(unittest.TestCase):
                 elif scope == 'full':
                     self.write('internal/worker.go', 'package changed\n')
                     self.commit()
-                output_path.write_text('existing=value\n', encoding='utf-8')
+                output_path.write_bytes(b'existing=value\n')
                 stdout = io.StringIO()
                 with contextlib.redirect_stdout(stdout), mock.patch.object(checker, 'run_checks') as run:
                     status = checker.main([
